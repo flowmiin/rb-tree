@@ -222,18 +222,20 @@ void delete_fixup(rbtree*t, node_t* x) {
         w->color = RBTREE_RED;
         x = x->parent;
       }
-      else if ((w->left->color == RBTREE_RED) && (w->right->color == RBTREE_BLACK)) { // case3. doubly black의 형제가 black이고 그 형제의 왼쪽 자녀가 red, 오른쪽 자녀는 black일 때
-        w->left->color = RBTREE_BLACK;
-        w->color = RBTREE_RED;
-        right_rotate(t, w);
-        w = x->parent->right;
-      }
-      else { // case4. double black의 오른쪽 형제가 black이고 그 형제의 오른쪽 자녀가 red일 때 
-        w->color = x->parent->color;
-        x->parent->color = RBTREE_BLACK;
-        w->right->color = RBTREE_BLACK;
-        left_rotate(t, x->parent);
-        x = t->root;
+      else {
+        if ((w->left->color == RBTREE_RED) && (w->right->color == RBTREE_BLACK)) { // case3. doubly black의 형제가 black이고 그 형제의 왼쪽 자녀가 red, 오른쪽 자녀는 black일 때
+          w->left->color = RBTREE_BLACK;
+          w->color = RBTREE_RED;
+          right_rotate(t, w);
+          w = x->parent->right;
+        }
+        else { // case4. double black의 오른쪽 형제가 black이고 그 형제의 오른쪽 자녀가 red일 때 
+          w->color = x->parent->color;
+          x->parent->color = RBTREE_BLACK;
+          w->right->color = RBTREE_BLACK;
+          left_rotate(t, x->parent);
+          x = t->root;
+        }
       }
     }
 
@@ -249,19 +251,23 @@ void delete_fixup(rbtree*t, node_t* x) {
         w->color = RBTREE_RED;
         x = x->parent;
       }
-      else if ((w->right->color == RBTREE_RED) && (w->left->color == RBTREE_BLACK)) {
-        w->right->color = RBTREE_BLACK;
-        w->color = RBTREE_RED;
-        left_rotate(t, w);
-        w = x->parent->right;
-      }
       else {
-        w->color = x->parent->color;
-        x->parent->color = RBTREE_BLACK;
-        w->left->color = RBTREE_BLACK;
-        right_rotate(t, x->parent);
-        x = t->root;
+        if ((w->right->color == RBTREE_RED) && (w->left->color == RBTREE_BLACK)) {
+          w->right->color = RBTREE_BLACK;
+          w->color = RBTREE_RED;
+          left_rotate(t, w);
+          w = x->parent->right;
+        }
+        else {
+          w->color = x->parent->color;
+          x->parent->color = RBTREE_BLACK;
+          w->left->color = RBTREE_BLACK;
+          right_rotate(t, x->parent);
+          x = t->root;
+        }
       }
+      
+      
     }
   }
   x->color = RBTREE_BLACK;
